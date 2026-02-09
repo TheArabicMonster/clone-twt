@@ -10,24 +10,25 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  email         String   @unique
-  username      String   @unique
-  name          String
-  bio           String?
-  image         String?
-  coverImage    String?
-  hashedPassword String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  email          String    @unique
+  username       String    @unique
+  name           String
+  bio            String?
+  image          String?
+  coverImage     String?
+  hashedPassword String?
+  emailVerified  DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  tweets        Tweet[]
-  likes         Like[]
-  comments      Comment[]
+  tweets   Tweet[]
+  likes    Like[]
+  comments Comment[]
   
   // Relations pour les followers/following
-  followers     Follow[] @relation("UserFollowers")
-  following     Follow[] @relation("UserFollowing")
+  followers Follow[] @relation("UserFollowers")
+  following Follow[] @relation("UserFollowing")
 
   @@map("users")
 }
