@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@plugin "@heroui/theme";
+@plugin "../../hero.ts";
 
 :root {
   --background: #ffffff;
