@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "WATCHPACK_POLLING=true next dev --webpack",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@heroui/button": "^2.2.30",
+    "@heroui/card": "^2.2.27",
+    "@heroui/input": "^2.4.31",
     "@heroui/react": "^2.8.8",
+    "@heroui/system": "^2.4.26",
+    "@heroui/theme": "^2.4.26",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "6.19.0",
     "bcryptjs": "^3.0.3",
