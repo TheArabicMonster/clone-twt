@@ -79,7 +79,7 @@ export default function SignUpPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md bg-transparent shadow-none">
         <CardHeader className="flex flex-col gap-1 px-6 pt-6">
           <h1 className="text-2xl font-bold">bienvenue sur araTexT</h1>
         </CardHeader>
@@ -101,6 +101,10 @@ export default function SignUpPage() {
               variant="bordered"
               isInvalid={!!errors.pseudo}
               errorMessage={errors.pseudo?.message}
+              classNames={{
+                inputWrapper:
+                  "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+              }}
             />
 
             <Input
@@ -110,6 +114,10 @@ export default function SignUpPage() {
               variant="bordered"
               isInvalid={!!errors.username}
               errorMessage={errors.username?.message}
+              classNames={{
+                inputWrapper:
+                  "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+              }}
             />
 
             <Input
@@ -120,6 +128,10 @@ export default function SignUpPage() {
               variant="bordered"
               isInvalid={!!errors.email}
               errorMessage={errors.email?.message}
+              classNames={{
+                inputWrapper:
+                  "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+              }}
             />
 
             <Input
@@ -130,6 +142,10 @@ export default function SignUpPage() {
               variant="bordered"
               isInvalid={!!errors.password}
               errorMessage={errors.password?.message}
+              classNames={{
+                inputWrapper:
+                  "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+              }}
             />
 
             <Input
@@ -140,6 +156,10 @@ export default function SignUpPage() {
               variant="bordered"
               isInvalid={!!errors.confirmPassword}
               errorMessage={errors.confirmPassword?.message}
+              classNames={{
+                inputWrapper:
+                  "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+              }}
             />
 
             <Button
