@@ -14,14 +14,10 @@ const registerSchema = z.object({
       /^[a-zA-Z0-9_]+$/,
       "Le nom d'utilisateur ne peut contenir que des lettres, chiffres et underscores",
     ),
-  name: z.string().min(1, "Le nom est requis"),
+  pseudo: z.string().min(1, "Le pseudo est requis"),
   password: z
     .string()
-    .min(8, "Le mot de passe doit contenir au moins 8 caractères")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-      "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre",
-    ),
+    .min(3, "Le mot de passe doit contenir au moins 3 caractères"),
 });
 
 export async function POST(request: Request) {
@@ -63,7 +59,7 @@ export async function POST(request: Request) {
       data: {
         email: validatedData.email,
         username: validatedData.username,
-        name: validatedData.name,
+        pseudo: validatedData.pseudo,
         hashedPassword: hashedPass,
       },
     });

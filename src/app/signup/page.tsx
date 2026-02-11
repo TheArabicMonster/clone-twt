@@ -17,14 +17,8 @@ const signUpSchema = z
       .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
       .max(20, "Maximum 20 caractères")
       .regex(/^[a-zA-Z0-9_]+$/, "Lettres, chiffres et underscores uniquement"),
-    name: z.string().min(1, "Le nom est requis"),
-    password: z
-      .string()
-      .min(8, "Minimum 8 caractères")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-        "Au moins une majuscule, une minuscule et un chiffre",
-      ),
+    pseudo: z.string().min(1, "Le pseudo est requis"),
+    password: z.string().min(3, "Minimum 3 caractères"),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -60,7 +54,7 @@ export default function SignUpPage() {
         body: JSON.stringify({
           email: data.email,
           username: data.username,
-          name: data.name,
+          pseudo: data.pseudo,
           password: data.password,
         }),
       });
@@ -102,12 +96,12 @@ export default function SignUpPage() {
             )}
 
             <Input
-              {...register("name")}
-              label="Nom complet"
-              placeholder="John Doe"
+              {...register("pseudo")}
+              label="Pseudo"
+              placeholder="JohnDoe"
               variant="bordered"
-              isInvalid={!!errors.name}
-              errorMessage={errors.name?.message}
+              isInvalid={!!errors.pseudo}
+              errorMessage={errors.pseudo?.message}
             />
 
             <Input
