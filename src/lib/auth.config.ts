@@ -38,7 +38,7 @@ export const authConfig: NextAuthConfig = {
         return {
           id: user.id,
           email: user.email,
-          name: user.name,
+          pseudo: user.pseudo,
           image: user.image,
           username: user.username,
         };
@@ -57,6 +57,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id;
         token.username = user.username as string;
+        token.pseudo = user.pseudo as string;
       }
       return token;
     },
@@ -64,21 +65,9 @@ export const authConfig: NextAuthConfig = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
+        session.user.pseudo = token.pseudo as string;
       }
       return session;
-    },
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnAuth =
-        nextUrl.pathname.startsWith("/login") ||
-        nextUrl.pathname.startsWith("/signup");
-
-      if (isOnAuth) {
-        if (isLoggedIn) return Response.redirect(new URL("/", nextUrl));
-        return true;
-      }
-
-      return true; // Permet l'accès à toutes les autres routes
     },
   },
 };
