@@ -50,7 +50,7 @@ export function HomeContent({ user }: HomeContentProps) {
             <Button
               color="primary"
               radius="lg"
-              variant="ghost"
+              variant="shadow"
               as={Link}
               href="/signup"
               size="lg"
