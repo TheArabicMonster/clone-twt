@@ -79,10 +79,7 @@ export default function SignUpPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 px-6 pt-6">
-          <h1 className="text-2xl font-bold">Créer un compte</h1>
-          <p className="text-sm text-default-500">
-            Rejoignez Twitter Clone dès aujourd&apos;hui
-          </p>
+          <h1 className="text-2xl font-bold">bienvenue sur araTexT</h1>
         </CardHeader>
         <CardBody className="px-6 pb-6">
           <form
@@ -150,7 +147,7 @@ export default function SignUpPage() {
               isLoading={isLoading}
               className="w-full"
             >
-              S&apos;inscrire
+              créer un compte
             </Button>
 
             <p className="text-center text-sm text-default-500">

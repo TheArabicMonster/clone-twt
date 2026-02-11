@@ -11,7 +11,7 @@ import { signIn } from "next-auth/react";
 
 // Schéma de validation
 const loginSchema = z.object({
-  email: z.string().email("Email invalide"),
+  username: z.string().min(3, "Le nom d'utilisateur est requis"),
   password: z.string().min(1, "Le mot de passe est requis"),
 });
 
@@ -47,7 +47,7 @@ export default function LoginPage() {
 
     try {
       const result = await signIn("credentials", {
-        email: data.email,
+        username: data.username,
         password: data.password,
         redirect: false,
       });
@@ -71,10 +71,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="flex flex-col gap-1 px-6 pt-6">
-          <h1 className="text-2xl font-bold">Se connecter</h1>
-          <p className="text-sm text-default-500">
-            Connectez-vous à votre compte Twitter Clone
-          </p>
+          <h1 className="text-2xl font-bold">bienvenue sur araTexT</h1>
         </CardHeader>
         <CardBody className="px-6 pb-6">
           <form
@@ -94,13 +91,13 @@ export default function LoginPage() {
             )}
 
             <Input
-              {...register("email")}
-              type="email"
-              label="Email"
-              placeholder="john@example.com"
+              {...register("username")}
+              type="text"
+              label="username"
+              placeholder="johndoe"
               variant="bordered"
-              isInvalid={!!errors.email}
-              errorMessage={errors.email?.message}
+              isInvalid={!!errors.username}
+              errorMessage={errors.username?.message}
             />
 
             <Input
@@ -124,7 +121,7 @@ export default function LoginPage() {
             </Button>
 
             <p className="text-center text-sm text-default-500">
-              Vous n&apos;avez pas de compte ?{" "}
+              Pas encore de compte ?{" "}
               <Link href="/signup" className="text-primary hover:underline">
                 S&apos;inscrire
               </Link>
