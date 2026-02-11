@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@heroui/react";
+import { Button } from "@heroui/button";
 import Link from "next/link";
 import { SignOutButton } from "@/components/SignOutButton";
 
@@ -17,7 +17,7 @@ export function HomeContent({ user }: HomeContentProps) {
     <div className="flex min-h-screen flex-col items-center justify-center p-8">
       <div className="w-full max-w-2xl space-y-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold">Twitter Clone</h1>
+          <h1 className="text-4xl font-bold">bienvenue sur araTexT</h1>
           <p className="mt-2 text-lg text-default-500">
             Bienvenue sur votre réseau social
           </p>
@@ -48,20 +48,22 @@ export function HomeContent({ user }: HomeContentProps) {
         ) : (
           <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
             <Button
+              color="primary"
+              radius="lg"
+              variant="ghost"
               as={Link}
               href="/signup"
-              color="primary"
               size="lg"
-              className="w-full sm:w-auto"
             >
               S&apos;inscrire
             </Button>
             <Button
+              color="primary"
+              radius="lg"
+              variant="ghost"
               as={Link}
               href="/login"
-              variant="bordered"
               size="lg"
-              className="w-full sm:w-auto"
             >
               Se connecter
             </Button>
