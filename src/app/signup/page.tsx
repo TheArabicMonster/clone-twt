@@ -104,6 +104,7 @@ export default function SignUpPage() {
               classNames={{
                 inputWrapper:
                   "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+                input: "text-white placeholder:text-gray-400",
               }}
             />
 
@@ -117,6 +118,7 @@ export default function SignUpPage() {
               classNames={{
                 inputWrapper:
                   "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+                input: "text-white placeholder:text-gray-400",
               }}
             />
 
@@ -131,6 +133,7 @@ export default function SignUpPage() {
               classNames={{
                 inputWrapper:
                   "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+                input: "text-white placeholder:text-gray-400",
               }}
             />
 
@@ -145,6 +148,7 @@ export default function SignUpPage() {
               classNames={{
                 inputWrapper:
                   "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+                input: "text-white placeholder:text-gray-400",
               }}
             />
 
@@ -159,6 +163,7 @@ export default function SignUpPage() {
               classNames={{
                 inputWrapper:
                   "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
+                input: "text-white placeholder:text-gray-400",
               }}
             />
 
