@@ -59,8 +59,8 @@ export default function LoginPage() {
         return;
       }
 
-      // Rediriger vers la page d'accueil
-      router.push("/");
+      // Rediriger vers le profil
+      router.push("/profile/" + data.username);
       router.refresh();
     } catch {
       setError("Une erreur est survenue. Veuillez réessayer.");
