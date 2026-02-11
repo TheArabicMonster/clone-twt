@@ -17,13 +17,13 @@ export async function requireAuth() {
 
 /**
  * Vérifie si l'utilisateur est connecté
- * Redirige vers / si l'utilisateur est déjà connecté (pour les pages login/signup)
+ * Redirige vers /profile/[username] si l'utilisateur est déjà connecté (pour les pages login/signup)
  */
 export async function requireGuest() {
   const session = await auth();
 
   if (session?.user) {
-    redirect("/");
+    redirect(`/profile/${session.user.username}`);
   }
 
   return null;
