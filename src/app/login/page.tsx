@@ -5,7 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button, Input, Card, CardBody, CardHeader } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
+import { Card, CardBody, CardHeader } from "@heroui/card";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 
