@@ -110,7 +110,7 @@ export function EditProfileModal({
           />
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" onPress={() => onOpenChange(false)}>
+          <Button variant="faded" onPress={() => onOpenChange(false)}>
             Annuler
           </Button>
           <Button color="primary" isLoading={isSaving} onPress={handleSave}>
