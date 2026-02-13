@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getSession } from "@/lib/auth-helpers";
 import { prisma } from "@/lib/prisma";
 import { ProfileContent } from "@/components/ProfileContent";
+import { AppShell } from "@/components/AppShell";
 
 interface ProfilePageProps {
   params: Promise<{ username: string }>;
@@ -95,13 +96,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
   };
 
   return (
-    <div className="min-h-screen">
+    <AppShell username={session?.user?.username}>
       <ProfileContent
         user={serializedUser}
         isOwnProfile={isOwnProfile}
         currentUserId={session?.user?.id}
         isFollowing={isFollowing}
       />
-    </div>
+    </AppShell>
   );
 }
