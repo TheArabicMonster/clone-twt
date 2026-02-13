@@ -99,7 +99,7 @@ export function ProfileContent({
   };
 
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div className="mx-auto w-full">
       {/* Banniere */}
       {user.coverImage ? (
         <div

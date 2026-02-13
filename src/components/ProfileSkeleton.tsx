@@ -4,7 +4,7 @@ import { Skeleton } from "@heroui/skeleton";
 
 export function ProfileSkeleton() {
   return (
-    <div className="mx-auto w-full max-w-2xl">
+    <div className="mx-auto w-full">
       {/* Banniere */}
       <Skeleton className="h-48 w-full rounded-none" />
 
