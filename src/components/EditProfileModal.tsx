@@ -19,11 +19,9 @@ interface EditProfileModalProps {
   username: string;
   currentBio: string;
   currentImage: string | null;
-  currentCoverImage: string | null;
   onSaved: (data: {
     bio: string;
     image: string | null;
-    coverImage: string | null;
   }) => void;
 }
 
@@ -33,12 +31,10 @@ export function EditProfileModal({
   username,
   currentBio,
   currentImage,
-  currentCoverImage,
   onSaved,
 }: EditProfileModalProps) {
   const [bio, setBio] = useState(currentBio);
   const [image, setImage] = useState(currentImage);
-  const [coverImage, setCoverImage] = useState(currentCoverImage);
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = async () => {
@@ -47,7 +43,7 @@ export function EditProfileModal({
       const res = await fetch(`/api/users/${username}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ bio, image, coverImage }),
+        body: JSON.stringify({ bio, image }),
       });
 
       if (res.ok) {
@@ -55,7 +51,6 @@ export function EditProfileModal({
         onSaved({
           bio: data.bio ?? "",
           image: data.image,
-          coverImage: data.coverImage,
         });
         onOpenChange(false);
       }
@@ -94,36 +89,6 @@ export function EditProfileModal({
               {({ open }) => (
                 <Button size="sm" variant="bordered" onPress={() => open()}>
                   Changer la photo
-                </Button>
-              )}
-            </CldUploadWidget>
-          </div>
-
-          {/* Photo de couverture */}
-          <div className="flex flex-col gap-2">
-            <p className="text-sm text-default-500">Photo de couverture</p>
-            {coverImage && (
-              <div
-                className="h-24 w-full rounded-lg bg-cover bg-center"
-                style={{ backgroundImage: `url(${coverImage})` }}
-              />
-            )}
-            <CldUploadWidget
-              uploadPreset="ml_default"
-              options={{ maxFiles: 1 }}
-              onSuccess={(result) => {
-                if (
-                  typeof result.info === "object" &&
-                  result.info !== null &&
-                  "secure_url" in result.info
-                ) {
-                  setCoverImage(result.info.secure_url as string);
-                }
-              }}
-            >
-              {({ open }) => (
-                <Button size="sm" variant="bordered" onPress={() => open()}>
-                  Changer la couverture
                 </Button>
               )}
             </CldUploadWidget>
