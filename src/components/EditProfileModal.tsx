@@ -63,7 +63,7 @@ export function EditProfileModal({
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="lg">
-      <ModalContent>
+      <ModalContent className="bg-default-800 text-white">
         <ModalHeader>Modifier le profil</ModalHeader>
         <ModalBody className="gap-4">
           {/* Photo de profil */}
@@ -87,7 +87,7 @@ export function EditProfileModal({
               }}
             >
               {({ open }) => (
-                <Button size="sm" variant="bordered" onPress={() => open()}>
+                <Button size="sm" color="primary" variant="ghost" onPress={() => open()}>
                   Changer la photo
                 </Button>
               )}
@@ -101,16 +101,16 @@ export function EditProfileModal({
             value={bio}
             onValueChange={setBio}
             maxLength={255}
-            variant="bordered"
+            variant="faded"
             classNames={{
               inputWrapper:
                 "!border-white data-[hover=true]:!border-white group-data-[focus=true]:!border-white",
-              input: "text-white placeholder:text-gray-400",
+              input: "text-black placeholder:text-gray-400",
             }}
           />
         </ModalBody>
         <ModalFooter>
-          <Button variant="light" onPress={() => onOpenChange(false)}>
+          <Button variant="ghost" onPress={() => onOpenChange(false)}>
             Annuler
           </Button>
           <Button color="primary" isLoading={isSaving} onPress={handleSave}>
