@@ -80,13 +80,11 @@ export function ProfileContent({
   const handleProfileSaved = (data: {
     bio: string;
     image: string | null;
-    coverImage: string | null;
   }) => {
     setUser((prev) => ({
       ...prev,
       bio: data.bio,
       image: data.image,
-      coverImage: data.coverImage,
     }));
   };
 
@@ -99,65 +97,59 @@ export function ProfileContent({
   };
 
   return (
-    <div className="mx-auto w-full">
-      {/* Banniere */}
-      {user.coverImage ? (
-        <div
-          className="h-48 w-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${user.coverImage})` }}
-        />
-      ) : (
-        <div className="h-48 w-full bg-gradient-to-r from-primary-600 to-primary-400" />
-      )}
-
+    <div className="w-full">
       {/* Profil header */}
-      <div className="px-4">
-        <div className="-mt-16 flex items-end justify-between">
+      <div className="border-b border-default-200 px-6 py-12">
+        {/* Ligne 1 : Avatar + Pseudo/Username/Stats + Bouton */}
+        <div className="flex items-center gap-4">
           <Avatar
             src={user.image ?? undefined}
             name={user.pseudo}
-            className="h-32 w-32 text-2xl ring-4 ring-background"
+            className="h-24 w-24 shrink-0 text-xl"
           />
 
-          {isOwnProfile ? (
-            <Button variant="bordered" onPress={onOpen}>
-              Modifier le profil
-            </Button>
-          ) : (
-            <Button
-              color={isFollowing ? "default" : "primary"}
-              variant={isFollowing ? "bordered" : "solid"}
-              isLoading={isFollowLoading}
-              onPress={handleFollow}
-            >
-              {isFollowing ? "Ne plus suivre" : "Suivre"}
-            </Button>
-          )}
+          <div className="flex flex-1 items-start justify-between">
+            <div>
+              <h1 className="text-2xl font-bold leading-tight">{user.pseudo}</h1>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+                <p className="text-base text-default-500">@{user.username}</p>
+                <div className="flex gap-3">
+                  <span className="text-sm">
+                    <span className="font-semibold">{followersCount}</span>{" "}
+                    <span className="text-default-500">abonnés</span>
+                  </span>
+                  <span className="text-sm">
+                    <span className="font-semibold">{user._count.following}</span>{" "}
+                    <span className="text-default-500">abonnements</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {isOwnProfile ? (
+              <Button variant="bordered" size="sm" onPress={onOpen}>
+                Modifier
+              </Button>
+            ) : (
+              <Button
+                color={isFollowing ? "default" : "primary"}
+                variant={isFollowing ? "bordered" : "solid"}
+                size="sm"
+                isLoading={isFollowLoading}
+                onPress={handleFollow}
+              >
+                {isFollowing ? "Ne plus suivre" : "Suivre"}
+              </Button>
+            )}
+          </div>
         </div>
 
-        {/* Informations */}
-        <div className="mt-4">
-          <h1 className="text-xl font-bold">{user.pseudo}</h1>
-          <p className="text-default-500">@{user.username}</p>
-        </div>
-
+        {/* Bio */}
         {user.bio && <p className="mt-3 text-sm">{user.bio}</p>}
 
-        <p className="mt-2 text-sm text-default-400">
+        <p className="mt-1 text-xs text-default-400">
           Rejoint le {formatDate(user.createdAt)}
         </p>
-
-        {/* Stats */}
-        <div className="mt-3 flex gap-4">
-          <span className="text-sm">
-            <span className="font-bold">{user._count.following}</span>{" "}
-            <span className="text-default-500">abonnements</span>
-          </span>
-          <span className="text-sm">
-            <span className="font-bold">{followersCount}</span>{" "}
-            <span className="text-default-500">abonnés</span>
-          </span>
-        </div>
       </div>
 
       {/* Tabs */}
@@ -165,14 +157,16 @@ export function ProfileContent({
         aria-label="Profil"
         variant="underlined"
         classNames={{
+          base: "w-full px-0",
           tabList:
-            "mt-6 w-full border-b border-default-200 gap-0 px-0",
+            " w-full border-default-200 gap-0 px-0 mx-0",
           tab: "flex-1 h-12",
           cursor: "bg-primary",
+          panel: "px-0",
         }}
       >
         <Tab key="posts" title="Posts">
-          <div className="space-y-4 p-4">
+          <div className="space-y-4 py-4">
             {user.tweets.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucun post pour le moment
@@ -183,7 +177,18 @@ export function ProfileContent({
                   key={tweet.id}
                   className="rounded-lg border border-default-200 p-4"
                 >
-                  <p>{tweet.content}</p>
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      src={user.image ?? undefined}
+                      name={user.pseudo}
+                      size="sm"
+                    />
+                    <div>
+                      <span className="font-bold">{user.pseudo}</span>{" "}
+                      <span className="text-default-500">@{user.username}</span>
+                    </div>
+                  </div>
+                  <p className="mt-2 font-medium">{tweet.content}</p>
                   {tweet.image && (
                     <img
                       src={tweet.image}
@@ -203,7 +208,7 @@ export function ProfileContent({
         </Tab>
 
         <Tab key="replies" title="Réponses">
-          <div className="space-y-4 p-4">
+          <div className="space-y-4 py-4">
             {user.comments.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucune réponse pour le moment
@@ -220,7 +225,7 @@ export function ProfileContent({
                   <p className="mt-1 text-sm text-default-500 italic">
                     &quot;{comment.tweet.content}&quot;
                   </p>
-                  <p className="mt-2">{comment.content}</p>
+                  <p className="mt-2 font-medium">{comment.content}</p>
                   <p className="mt-2 text-sm text-default-400">
                     {formatDate(comment.createdAt)}
                   </p>
@@ -231,7 +236,7 @@ export function ProfileContent({
         </Tab>
 
         <Tab key="likes" title="J'aime">
-          <div className="space-y-4 p-4">
+          <div className="space-y-4 py-4">
             {user.likes.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucun j&apos;aime pour le moment
@@ -259,7 +264,7 @@ export function ProfileContent({
                       </div>
                     </div>
                   )}
-                  <p className="mt-2">{like.tweet.content}</p>
+                  <p className="mt-2 font-medium">{like.tweet.content}</p>
                   {like.tweet.image && (
                     <img
                       src={like.tweet.image}
@@ -287,7 +292,6 @@ export function ProfileContent({
           username={user.username}
           currentBio={user.bio ?? ""}
           currentImage={user.image}
-          currentCoverImage={user.coverImage}
           onSaved={handleProfileSaved}
         />
       )}
