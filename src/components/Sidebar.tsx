@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { href: "/", icon: Home, label: "Timeline" },
+  { href: "/timeline", icon: Home, label: "Timeline" },
   { href: "/messages", icon: MessageCircle, label: "Messages" },
 ];
 
