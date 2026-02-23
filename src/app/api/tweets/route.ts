@@ -61,7 +61,14 @@ export async function GET() {
           select: { pseudo: true, username: true, image: true },
         },
         likes: { select: { id: true, userId: true } },
-        comments: { select: { id: true } },
+        comments: {
+          include: {
+            user: {
+              select: { pseudo: true, username: true, image: true },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
       },
     });
 
