@@ -104,7 +104,7 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
     };
 
     return (
-        <div className="flex flex-col gap-4 border-b border-default-200 p-4">
+        <div className="flex flex-col gap-4 border border-default-200 rounded-2xl p-4 mb-4">
             {/* Corps du tweet */}
             <div className="flex gap-4">
                 <Link href={`/profile/${tweet.user.username}`}>
