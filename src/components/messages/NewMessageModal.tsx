@@ -58,7 +58,7 @@ export function NewMessageModal({ isOpen, onOpenChange }: NewMessageModalProps) 
             }
         };
 
-        // Debounce search
+        // Délai d'attente pour la recherche (debounce)
         const timer = setTimeout(searchUsers, 300);
         return () => clearTimeout(timer);
     }, [query, isOpen]);

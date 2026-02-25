@@ -27,7 +27,7 @@ export function ProfileSkeleton() {
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Onglets */}
       <div className="mt-6 flex border-b border-default-200">
         <Skeleton className="mx-4 h-10 w-20 rounded-lg" />
         <Skeleton className="mx-4 h-10 w-20 rounded-lg" />

@@ -87,11 +87,10 @@ export function ComposeTweet({ onTweetCreated }: ComposeTweetProps) {
                   className="w-full resize-none rounded-lg border border-default-200 bg-transparent p-3 text-foreground placeholder:text-default-400 focus:border-primary focus:outline-none"
                 />
                 <p
-                  className={`text-right text-sm ${
-                    charCount > maxChars - 20
+                  className={`text-right text-sm ${charCount > maxChars - 20
                       ? "text-danger"
                       : "text-default-400"
-                  }`}
+                    }`}
                 >
                   {charCount}/{maxChars}
                 </p>

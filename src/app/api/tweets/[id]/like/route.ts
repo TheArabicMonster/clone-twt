@@ -15,7 +15,7 @@ export async function POST(
         const { id } = await params;
         const tweetId = id;
 
-        // Check if tweet exists
+        // Vérifier si le tweet existe
         const tweet = await prisma.tweet.findUnique({
             where: { id: tweetId },
         });
@@ -27,7 +27,7 @@ export async function POST(
             );
         }
 
-        // Check if like exists
+        // Vérifier si le like existe
         const existingLike = await prisma.like.findUnique({
             where: {
                 userId_tweetId: {
@@ -38,7 +38,7 @@ export async function POST(
         });
 
         if (existingLike) {
-            // Unlike
+            // Ne plus aimer
             await prisma.like.delete({
                 where: {
                     id: existingLike.id,
@@ -46,7 +46,7 @@ export async function POST(
             });
             return NextResponse.json({ liked: false }, { status: 200 });
         } else {
-            // Like
+            // Aimer
             await prisma.like.create({
                 data: {
                     userId: session.user.id,

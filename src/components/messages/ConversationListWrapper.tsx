@@ -17,15 +17,15 @@ interface ConversationListWrapperProps {
     partner: Partner;
 }
 
-// Responsive master-detail layout:
-// - Mobile: show only list OR chat (toggle on selection / back)
-// - Desktop: show both side by side
+// Disposition réactive maître-détails :
+// - Mobile : affiche uniquement la liste OU le chat (bascule sur sélection / retour)
+// - Bureau : affiche les deux côte à côte
 export function ConversationListWrapper({
     currentUserId,
     partner,
 }: ConversationListWrapperProps) {
     const router = useRouter();
-    // On mobile, if we have a partner selected we show chat view
+    // Sur mobile, si un partenaire est sélectionné, on affiche la vue chat
     const [mobileChatOpen, setMobileChatOpen] = useState(true);
 
     const handleSelectConversation = (partnerId: string) => {
@@ -40,7 +40,7 @@ export function ConversationListWrapper({
 
     return (
         <div className="flex h-screen overflow-hidden">
-            {/* Sidebar: hidden on mobile when chat is open */}
+            {/* Barre latérale : masquée sur mobile quand le chat est ouvert */}
             <div
                 className={`flex-col border-r border-default-200 md:flex md:w-80 lg:w-96 ${mobileChatOpen ? "hidden" : "flex w-full"
                     }`}
@@ -53,7 +53,7 @@ export function ConversationListWrapper({
                 />
             </div>
 
-            {/* Chat: hidden on mobile when list is open */}
+            {/* Chat : masqué sur mobile quand la liste est ouverte */}
             <div
                 className={`flex-col md:flex md:flex-1 ${mobileChatOpen ? "flex flex-1" : "hidden"
                     }`}

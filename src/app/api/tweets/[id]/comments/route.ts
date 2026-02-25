@@ -25,7 +25,7 @@ export async function POST(
         const { id } = await params;
         const tweetId = id;
 
-        // Check if tweet exists
+        // Vérifier si le tweet existe
         const tweet = await prisma.tweet.findUnique({
             where: { id: tweetId },
         });

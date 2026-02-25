@@ -3,8 +3,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 // GET /api/messages/conversations
-// Returns a list of distinct conversation partners,
-// each with the last message and unread count, sorted by recency.
+// Retourne une liste de partenaires de conversation distincts,
+// chacun avec le dernier message et le nombre non lus, triés par récence.
 export async function GET() {
     try {
         const session = await auth();
@@ -14,7 +14,7 @@ export async function GET() {
 
         const currentUserId = session.user.id;
 
-        // Get all messages involving current user
+        // Récupérer tous les messages impliquant l'utilisateur courant
         const messages = await prisma.message.findMany({
             where: {
                 OR: [
@@ -33,7 +33,7 @@ export async function GET() {
             },
         });
 
-        // Build a map: partner ID → { lastMessage, unreadCount }
+        // Construire une map : ID partenaire → { lastMessage, unreadCount }
         const conversationMap = new Map<
             string,
             {
@@ -59,7 +59,7 @@ export async function GET() {
                 });
             }
 
-            // Count unread messages from this partner
+            // Compter les messages non lus de ce partenaire
             if (!isCurrentSender && !message.isRead) {
                 const entry = conversationMap.get(partner.id)!;
                 entry.unreadCount += 1;

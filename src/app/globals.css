@@ -28,7 +28,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Force white text for autofilled inputs */
+/* Forcer le texte en blanc pour les champs remplis automatiquement */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,

@@ -12,7 +12,7 @@ const messageSchema = z.object({
     receiverId: z.string().min(1, "Destinataire requis"),
 });
 
-// GET /api/messages?with=[userId] — fetch conversation history
+// GET /api/messages?with=[userId] — récupérer l'historique de la conversation
 export async function GET(request: Request) {
     try {
         const session = await auth();
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 
         const currentUserId = session.user.id;
 
-        // Fetch all messages between the two users, ordered ascending
+        // Récupérer tous les messages entre les deux utilisateurs, triés par ordre croissant
         const messages = await prisma.message.findMany({
             where: {
                 OR: [
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
             },
         });
 
-        // Mark messages from the other user as read
+        // Marquer les messages de l'autre utilisateur comme lus
         await prisma.message.updateMany({
             where: {
                 senderId: withUserId,
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
     }
 }
 
-// POST /api/messages — send a new message
+// POST /api/messages — envoyer un nouveau message
 export async function POST(request: Request) {
     try {
         const session = await auth();
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
         const currentUserId = session.user.id;
 
-        // Verify receiver exists
+        // Vérifier si le destinataire existe
         const receiver = await prisma.user.findUnique({
             where: { id: validatedData.receiverId },
             select: { id: true, pseudo: true, username: true, image: true },
@@ -99,7 +99,7 @@ export async function POST(request: Request) {
             );
         }
 
-        // Create message in DB
+        // Créer le message en BD
         const message = await prisma.message.create({
             data: {
                 content: validatedData.content,
@@ -121,7 +121,7 @@ export async function POST(request: Request) {
             createdAt: message.createdAt.toISOString(),
         };
 
-        // Pusher: broadcast on a canonical channel (sorted IDs for uniqueness)
+        // Pusher : diffuser sur un canal canonique (ID triés pour l'unicité)
         const channelId = [currentUserId, validatedData.receiverId].sort().join("-");
         await pusher.trigger(`chat-${channelId}`, "new-message", serialized);
 

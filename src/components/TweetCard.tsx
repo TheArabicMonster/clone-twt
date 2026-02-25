@@ -56,7 +56,7 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
         if (!currentUserId || isLikeLoading) return;
 
         setIsLikeLoading(true);
-        // Optimistic UI update
+        // Mise à jour optimiste de l'interface
         setLikesCount((prev) => (isLiked ? prev - 1 : prev + 1));
         setIsLiked(!isLiked);
 
@@ -66,12 +66,12 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
             });
 
             if (!res.ok) {
-                // Revert on error
+                // Annuler en cas d'erreur
                 setLikesCount((prev) => (!isLiked ? prev - 1 : prev + 1));
                 setIsLiked(!isLiked);
             }
         } catch {
-            // Revert on error
+            // Annuler en cas d'erreur
             setLikesCount((prev) => (!isLiked ? prev - 1 : prev + 1));
             setIsLiked(!isLiked);
         } finally {
@@ -105,7 +105,7 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
 
     return (
         <div className="flex flex-col gap-4 border-b border-default-200 p-4">
-            {/* Tweet Body */}
+            {/* Corps du tweet */}
             <div className="flex gap-4">
                 <Link href={`/profile/${tweet.user.username}`}>
                     <Avatar
@@ -129,9 +129,9 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
                     </div>
                     <p className="whitespace-pre-wrap text-[15px]">{tweet.content}</p>
 
-                    {/* Action Buttons */}
+                    {/* Boutons d'action */}
                     <div className="mt-3 flex items-center justify-between text-default-500">
-                        {/* Reply Button */}
+                        {/* Bouton répondre */}
                         <button
                             onClick={() => setShowReplyForm(!showReplyForm)}
                             className="flex items-center gap-2 transition-colors hover:text-primary group"
@@ -143,7 +143,7 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
                             <span className="text-sm">{comments.length > 0 ? comments.length : ""}</span>
                         </button>
 
-                        {/* Like Button */}
+                        {/* Bouton j'aime */}
                         <button
                             onClick={handleLike}
                             disabled={isLikeLoading || !currentUserId}
@@ -161,12 +161,12 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
                             <span className="text-sm">{likesCount > 0 ? likesCount : ""}</span>
                         </button>
 
-                        <div /> {/* Placeholder for alignment */}
+                        <div /> {/* Espace réservé pour l'alignement */}
                     </div>
                 </div>
             </div>
 
-            {/* Reply Form */}
+            {/* Formulaire de réponse */}
             {showReplyForm && currentUserId && (
                 <div className="ml-14 flex items-start gap-3 mt-2">
                     <textarea
@@ -188,7 +188,7 @@ export function TweetCard({ tweet, currentUserId }: TweetCardProps) {
                 </div>
             )}
 
-            {/* Comments List */}
+            {/* Liste des commentaires */}
             {comments.length > 0 && (
                 <div className="ml-14 mt-4 space-y-4">
                     {comments.map((comment) => (

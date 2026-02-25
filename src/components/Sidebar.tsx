@@ -32,11 +32,10 @@ export function Sidebar({ username }: SidebarProps) {
               isIconOnly
               variant={isActive ? "solid" : "light"}
               color={isActive ? "primary" : "default"}
-              className={`h-12 w-12 ${
-                isActive
+              className={`h-12 w-12 ${isActive
                   ? ""
                   : "text-default-500 hover:bg-default-100 hover:text-foreground"
-              }`}
+                }`}
               title={item.label}
             >
               <item.icon size={24} />
@@ -52,11 +51,10 @@ export function Sidebar({ username }: SidebarProps) {
             isIconOnly
             variant={pathname.startsWith("/profile") ? "solid" : "light"}
             color={pathname.startsWith("/profile") ? "primary" : "default"}
-            className={`h-12 w-12 ${
-              pathname.startsWith("/profile")
+            className={`h-12 w-12 ${pathname.startsWith("/profile")
                 ? ""
                 : "text-default-500 hover:bg-default-100 hover:text-foreground"
-            }`}
+              }`}
             title="Profil"
           >
             <User size={24} />

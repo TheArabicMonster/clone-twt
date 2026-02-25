@@ -12,7 +12,7 @@ export default async function ConversationPage({ params }: PageProps) {
     const session = await requireAuth();
     const currentUserId = session.user.id;
 
-    // Fetch partner info server-side
+    // Récupérer les informations du partenaire côté serveur
     const partner = await prisma.user.findUnique({
         where: { id: userId },
         select: { id: true, pseudo: true, username: true, image: true },

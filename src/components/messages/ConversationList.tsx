@@ -59,12 +59,12 @@ export function ConversationList({
 
     useEffect(() => {
         fetchConversations();
-        // Refresh every 10s to catch new conversations started elsewhere
+        // Rafraîchir toutes les 10s pour capter les nouvelles conversations démarrées ailleurs
         const interval = setInterval(fetchConversations, 10000);
         return () => clearInterval(interval);
     }, [fetchConversations]);
 
-    // Expose refresh method for ChatWindow to call after sending
+    // Exposer la méthode de rafraîchissement pour que ChatWindow l'appelle après l'envoi
     useEffect(() => {
         const handler = () => fetchConversations();
         window.addEventListener("messages:refresh", handler);

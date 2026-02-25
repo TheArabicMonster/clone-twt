@@ -38,19 +38,19 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
     const [sending, setSending] = useState(false);
     const bottomRef = useRef<HTMLDivElement>(null);
 
-    // Scroll to bottom on new messages
+    // Faire défiler vers le bas pour les nouveaux messages
     const scrollToBottom = useCallback(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, []);
 
-    // Load conversation history
+    // Charger l'historique de la conversation
     const loadMessages = useCallback(async () => {
         try {
             const res = await fetch(`/api/messages?with=${partner.id}`);
             if (res.ok) {
                 const data = await res.json();
                 setMessages(data);
-                // Notify conversation list to refresh unread counts
+                // Notifier la liste de conversations pour rafraîchir le nombre de non lus
                 window.dispatchEvent(new Event("messages:refresh"));
             }
         } catch (error) {
@@ -68,7 +68,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
         scrollToBottom();
     }, [messages, scrollToBottom]);
 
-    // Pusher real-time subscription
+    // Abonnement temps réel Pusher
     useEffect(() => {
         const channelId = [currentUserId, partner.id].sort().join("-");
         const pusher = getPusherClient();
@@ -76,26 +76,26 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
 
         channel.bind("new-message", (data: Message) => {
             setMessages((prev) => {
-                // Avoid absolute duplicates
+                // Éviter les doublons absolus
                 if (prev.some((m) => m.id === data.id)) return prev;
 
-                // If it's a message we sent, check if we have a matching optimistic message
+                // Si c'est un message que nous avons envoyé, vérifier si nous avons un message optimiste correspondant
                 if (data.senderId === currentUserId) {
                     const optIndex = prev.findIndex(
                         m => m.id.startsWith("optimistic-") && m.content === data.content
                     );
                     if (optIndex !== -1) {
-                        // Replace the optimistic message with the real one from Pusher
+                        // Remplacer le message optimiste par le vrai provenant de Pusher
                         const next = [...prev];
                         next[optIndex] = data;
                         return next;
                     }
                 }
 
-                // Otherwise, just append it
+                // Sinon, l'ajouter simplement
                 return [...prev, data];
             });
-            // Refresh conversation list
+            // Rafraîchir la liste des conversations
             window.dispatchEvent(new Event("messages:refresh"));
         });
 
@@ -110,7 +110,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
 
         setSending(true);
 
-        // Optimistic update
+        // Mise à jour optimiste
         const optimistic: Message = {
             id: `optimistic-${Date.now()}`,
             content,
@@ -135,19 +135,19 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                 setMessages((prev) => {
                     const hasOptimistic = prev.some(m => m.id === optimistic.id);
                     if (!hasOptimistic) {
-                        // Pusher event already replaced the optimistic message.
-                        // Ensure the real message is in the list just in case.
+                        // L'événement Pusher a déjà remplacé le message optimiste.
+                        // S'assurer que le vrai message est dans la liste au cas où.
                         if (!prev.some(m => m.id === real.id)) {
                             return [...prev, real];
                         }
                         return prev;
                     }
-                    // Fetch completed first, replace optimistic with real message
+                    // La requête s'est terminée en premier, remplacer le message optimiste par le vrai
                     return prev.map((m) => (m.id === optimistic.id ? real : m));
                 });
                 window.dispatchEvent(new Event("messages:refresh"));
             } else {
-                // Remove optimistic on failure
+                // Supprimer le message optimiste en cas d'échec
                 setMessages((prev) => prev.filter((m) => m.id !== optimistic.id));
             }
         } catch {
@@ -159,7 +159,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
 
     return (
         <div className="flex h-full flex-col">
-            {/* Header */}
+            {/* En-tête */}
             <div className="flex items-center gap-3 border-b border-default-200 px-4 py-3">
                 {onBack && (
                     <Button
@@ -188,7 +188,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                 </Link>
             </div>
 
-            {/* Messages area */}
+            {/* Zone des messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4">
                 {loading ? (
                     <div className="flex h-full items-center justify-center">
@@ -234,7 +234,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                 )}
             </div>
 
-            {/* Input */}
+            {/* Saisie */}
             <MessageInput onSend={sendMessage} sending={sending} />
         </div>
     );

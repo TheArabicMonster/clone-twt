@@ -37,7 +37,7 @@ export function TimelineFeed({ currentUserId }: TimelineFeedProps) {
 
     return (
         <div className="relative pb-24">
-            {/* Compose Tweet section for the timeline */}
+            {/* Section de composition de tweet pour la timeline */}
             <ComposeTweet onTweetCreated={fetchTweets} />
 
             {isLoading ? (

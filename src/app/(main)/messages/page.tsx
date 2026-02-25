@@ -12,12 +12,12 @@ export default async function MessagesPage() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      {/* Conversation list — full width on mobile, fixed width on desktop */}
+      {/* Liste de conversations — pleine largeur sur mobile, largeur fixe sur bureau */}
       <div className="flex w-full flex-col border-r border-default-200 md:w-80 lg:w-96">
         <ConversationList currentUserId={currentUserId} />
       </div>
 
-      {/* Empty state — only visible on desktop */}
+      {/* État vide — visible uniquement sur bureau */}
       <div className="hidden flex-1 flex-col items-center justify-center gap-4 text-default-400 md:flex">
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-default-100">
           <svg

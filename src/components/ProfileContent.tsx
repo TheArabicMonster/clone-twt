@@ -99,7 +99,7 @@ export function ProfileContent({
 
   return (
     <div className="w-full">
-      {/* Profil header */}
+      {/* En-tête du profil */}
       <div className="border-b border-default-200 px-6 py-12">
         {/* Ligne 1 : Avatar + Pseudo/Username/Stats + Bouton */}
         <div className="flex items-center gap-4">
@@ -164,7 +164,7 @@ export function ProfileContent({
         </p>
       </div>
 
-      {/* Tabs */}
+      {/* Onglets */}
       <Tabs
         aria-label="Profil"
         variant="underlined"
