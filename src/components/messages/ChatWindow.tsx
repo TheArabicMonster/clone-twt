@@ -169,7 +169,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                         onPress={onBack}
                         className="md:hidden"
                     >
-                        <ArrowLeft size={20} />
+                        <ArrowLeft size={20} className="text-white" />
                     </Button>
                 )}
                 <Link
@@ -211,7 +211,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                                         <div
                                             className={`rounded-2xl px-4 py-2 text-sm leading-relaxed ${isOwn
                                                 ? "rounded-br-sm bg-primary text-white"
-                                                : "rounded-bl-sm bg-default-100 text-foreground dark:bg-default-200"
+                                                : "rounded-bl-sm border-2 border-primary bg-transparent text-foreground"
                                                 }`}
                                         >
                                             {message.content}
