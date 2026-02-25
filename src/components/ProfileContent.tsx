@@ -178,7 +178,7 @@ export function ProfileContent({
         }}
       >
         <Tab key="posts" title="Posts">
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 px-4 py-4">
             {user.tweets.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucun post pour le moment
@@ -187,7 +187,7 @@ export function ProfileContent({
               user.tweets.map((tweet) => (
                 <div
                   key={tweet.id}
-                  className="rounded-lg border border-default-200 p-4"
+                  className="mb-4 rounded-2xl border border-default-200 p-4"
                 >
                   <div className="flex items-center gap-2">
                     <Avatar
@@ -220,7 +220,7 @@ export function ProfileContent({
         </Tab>
 
         <Tab key="replies" title="Réponses">
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 px-4 py-4">
             {user.comments.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucune réponse pour le moment
@@ -229,7 +229,7 @@ export function ProfileContent({
               user.comments.map((comment) => (
                 <div
                   key={comment.id}
-                  className="rounded-lg border border-default-200 p-4"
+                  className="mb-4 rounded-2xl border border-default-200 p-4"
                 >
                   <p className="text-xs text-default-400">
                     En réponse à un tweet
@@ -248,7 +248,7 @@ export function ProfileContent({
         </Tab>
 
         <Tab key="likes" title="J'aime">
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 px-4 py-4">
             {user.likes.length === 0 ? (
               <p className="py-8 text-center text-default-400">
                 Aucun j&apos;aime pour le moment
@@ -257,7 +257,7 @@ export function ProfileContent({
               user.likes.map((like) => (
                 <div
                   key={like.id}
-                  className="rounded-lg border border-default-200 p-4"
+                  className="mb-4 rounded-2xl border border-default-200 p-4"
                 >
                   {like.tweet.user && (
                     <div className="flex items-center gap-2">
