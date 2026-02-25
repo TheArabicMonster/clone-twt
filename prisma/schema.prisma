@@ -31,6 +31,10 @@ model User {
   followers Follow[] @relation("UserFollowers")
   following Follow[] @relation("UserFollowing")
 
+  // Relations pour les messages
+  messagesSent     Message[] @relation("MessagesSent")
+  messagesReceived Message[] @relation("MessagesReceived")
+
   @@map("users")
 }
 
@@ -87,4 +91,19 @@ model Follow {
 
   @@unique([followerId, followingId])
   @@map("follows")
+}
+
+model Message {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  senderId   String   @db.ObjectId
+  receiverId String   @db.ObjectId
+
+  sender     User     @relation("MessagesSent",     fields: [senderId],   references: [id], onDelete: Cascade)
+  receiver   User     @relation("MessagesReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@map("messages")
 }

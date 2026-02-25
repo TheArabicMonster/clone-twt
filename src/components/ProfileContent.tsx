@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Avatar } from "@heroui/avatar";
 import { Button } from "@heroui/button";
 import { Tabs, Tab } from "@heroui/tabs";
@@ -131,15 +132,26 @@ export function ProfileContent({
                 Modifier
               </Button>
             ) : (
-              <Button
-                color={isFollowing ? "default" : "primary"}
-                variant={isFollowing ? "bordered" : "solid"}
-                size="sm"
-                isLoading={isFollowLoading}
-                onPress={handleFollow}
-              >
-                {isFollowing ? "Ne plus suivre" : "Suivre"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  as={Link}
+                  href={`/messages/${user.id}`}
+                  variant="bordered"
+                  size="sm"
+                  title="Envoyer un message"
+                >
+                  Message
+                </Button>
+                <Button
+                  color={isFollowing ? "default" : "primary"}
+                  variant={isFollowing ? "bordered" : "solid"}
+                  size="sm"
+                  isLoading={isFollowLoading}
+                  onPress={handleFollow}
+                >
+                  {isFollowing ? "Ne plus suivre" : "Suivre"}
+                </Button>
+              </div>
             )}
           </div>
         </div>
