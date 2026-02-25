@@ -51,7 +51,7 @@ export function TimelineFeed({ currentUserId }: TimelineFeedProps) {
                     Aucun tweet pour le moment.
                 </div>
             ) : (
-                <div className="flex flex-col border-x border-default-200">
+                <div className="flex flex-col px-4">
                     {tweets.map((tweet) => (
                         <TweetCard
                             key={tweet.id}
