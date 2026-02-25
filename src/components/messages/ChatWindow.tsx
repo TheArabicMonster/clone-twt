@@ -209,7 +209,7 @@ export function ChatWindow({ currentUserId, partner, onBack }: ChatWindowProps) 
                                 >
                                     <div className="flex max-w-[75%] flex-col gap-1">
                                         <div
-                                            className={`rounded-2xl px-4 py-2 text-sm leading-relaxed ${isOwn
+                                            className={`break-all whitespace-pre-wrap rounded-2xl px-4 py-2 text-sm leading-relaxed ${isOwn
                                                 ? "rounded-br-sm bg-primary text-white"
                                                 : "rounded-bl-sm border-2 border-primary bg-transparent text-foreground"
                                                 }`}

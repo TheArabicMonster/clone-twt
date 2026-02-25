@@ -73,7 +73,7 @@ export function ComposeTweet({ onTweetCreated }: ComposeTweetProps) {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader>Nouveau tweet</ModalHeader>
+              <ModalHeader className="text-black">Nouveau tweet</ModalHeader>
               <ModalBody>
                 {error && (
                   <p className="text-sm text-danger">{error}</p>
@@ -84,12 +84,12 @@ export function ComposeTweet({ onTweetCreated }: ComposeTweetProps) {
                   placeholder="Quoi de neuf ?"
                   maxLength={maxChars}
                   rows={4}
-                  className="w-full resize-none rounded-lg border border-default-200 bg-transparent p-3 text-foreground placeholder:text-default-400 focus:border-primary focus:outline-none"
+                  className="w-full resize-none rounded-lg border border-default-200 bg-transparent p-3 text-black placeholder:text-default-400 focus:border-primary focus:outline-none"
                 />
                 <p
                   className={`text-right text-sm ${charCount > maxChars - 20
-                      ? "text-danger"
-                      : "text-default-400"
+                    ? "text-danger"
+                    : "text-default-400"
                     }`}
                 >
                   {charCount}/{maxChars}

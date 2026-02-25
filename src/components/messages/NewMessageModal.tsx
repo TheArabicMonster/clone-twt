@@ -73,7 +73,7 @@ export function NewMessageModal({ isOpen, onOpenChange }: NewMessageModalProps) 
             <ModalContent>
                 {() => (
                     <>
-                        <ModalHeader className="flex flex-col gap-1">
+                        <ModalHeader className="flex flex-col gap-1 text-black">
                             Nouvelle discussion
                         </ModalHeader>
                         <ModalBody className="pb-6">
@@ -84,6 +84,7 @@ export function NewMessageModal({ isOpen, onOpenChange }: NewMessageModalProps) 
                                 value={query}
                                 onValueChange={setQuery}
                                 variant="bordered"
+                                classNames={{ input: "text-black" }}
                             />
 
                             <div className="mt-4 flex min-h-[200px] flex-col gap-2">
@@ -113,7 +114,7 @@ export function NewMessageModal({ isOpen, onOpenChange }: NewMessageModalProps) 
                                                     size="sm"
                                                 />
                                                 <div className="flex flex-col items-start">
-                                                    <span className="text-sm font-semibold leading-none">
+                                                    <span className="text-sm font-semibold leading-none text-default-700">
                                                         {user.pseudo}
                                                     </span>
                                                     <span className="text-xs text-default-500">
