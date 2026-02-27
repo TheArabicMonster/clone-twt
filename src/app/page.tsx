@@ -1,8 +1,9 @@
+"use client";
 import { auth } from "@/lib/auth";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { SignOutButton } from "@/components/SignOutButton";
-
+import { use } from "react";
 export default async function Home() {
   const session = await auth();
 
