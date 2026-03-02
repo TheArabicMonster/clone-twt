@@ -58,7 +58,7 @@ export default function LoginPage() {
       }
 
       // Rediriger vers la page d'accueil
-      router.push("/");
+      router.push("/profil");
       router.refresh();
     } catch {
       setError("Une erreur est survenue. Veuillez réessayer.");
