@@ -12,7 +12,7 @@ export default async function ProtectedLayout({
     redirect("/login");
   }
 
-  return <div className="flex">
+  return <div className="flex h-screen">
         <SideBar />
         {children}
     </div>;
