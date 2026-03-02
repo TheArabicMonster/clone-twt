@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
-
+import SideBar from "@/components/SideBar";
 export default async function ProtectedLayout({
   children,
 }: {
@@ -12,5 +12,8 @@ export default async function ProtectedLayout({
     redirect("/login");
   }
 
-  return <>{children}</>;
+  return <div className="flex">
+        <SideBar />
+        {children}
+    </div>;
 }
