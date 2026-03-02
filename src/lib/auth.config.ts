@@ -35,8 +35,15 @@ export const authConfig: NextAuthConfig = {
         const isOnAuth =
           nextUrl.pathname.startsWith("/login") ||
           nextUrl.pathname.startsWith("/signup");
-
+        //Liste Des routes ou il faut etre logged in pour y acceder
+        const protectedRoutes = ["/profil", "/timeline", "/messages"];
         const isOnLandingPage = nextUrl.pathname==="/";
+        const isOnProcectedRoute = protectedRoutes.some((route) =>
+          nextUrl.pathname.startsWith(route)
+        ); 
+        if(isOnProcectedRoute&&!isLoggedIn) {
+          return Response.redirect(new URL("/login", nextUrl));
+        }
         if(isOnLandingPage&&isLoggedIn) {
           return Response.redirect(new URL("/profil", nextUrl));
         }
