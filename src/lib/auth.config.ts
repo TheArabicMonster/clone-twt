@@ -18,6 +18,7 @@ export const authConfig: NextAuthConfig = {
         token.id = user.id;
         token.username = user.username as string;
         token.pseudo = user.pseudo as string;
+        token.bio = (user.bio as string | null) ?? null;
       }
       return token;
     },
@@ -26,6 +27,7 @@ export const authConfig: NextAuthConfig = {
         session.user.id = token.id as string;
         session.user.username = token.username as string;
         session.user.pseudo = token.pseudo as string;
+        session.user.bio = token.bio as string | null;
       }
       return session;
     },
@@ -38,6 +40,7 @@ export const authConfig: NextAuthConfig = {
         //Liste Des routes ou il faut etre logged in pour y acceder
         const protectedRoutes = ["/profil", "/timeline", "/messages"];
         const isOnLandingPage = nextUrl.pathname==="/";
+        const isOnNormalProfil = nextUrl.pathname === "/profil";
         const isOnProcectedRoute = protectedRoutes.some((route) =>
           nextUrl.pathname.startsWith(route)
         ); 
@@ -45,11 +48,14 @@ export const authConfig: NextAuthConfig = {
           return Response.redirect(new URL("/login", nextUrl));
         }
         if(isOnLandingPage&&isLoggedIn) {
-          return Response.redirect(new URL("/profil", nextUrl));
+          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
         }
         if (isOnAuth) {
-          if (isLoggedIn) return Response.redirect(new URL("/profil", nextUrl));
-          return true;
+          if (isLoggedIn) return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
+          return true; 
+        }
+        if(isOnNormalProfil&&isLoggedIn) {
+          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
         }
 
         return true; // Permet l'accès à toutes les autres routes
