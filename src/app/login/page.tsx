@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,7 @@ const loginSchema = z.object({
 
 type LoginFormData = z.infer<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [error, setError] = useState("");
@@ -57,10 +57,10 @@ export default function LoginPage() {
         return;
       }
 
-      // Rediriger vers la page d'accueil
-      router.push("/profil");
+      // Rediriger / et ensuite le middleware s'occupera de rediriger vers bon profil
+      router.push("/");
       router.refresh();
-    } catch {
+    } catch (error) {
       setError("Une erreur est survenue. Veuillez réessayer.");
     } finally {
       setIsLoading(false);
@@ -133,5 +133,13 @@ export default function LoginPage() {
         </CardBody>
       </Card>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }
