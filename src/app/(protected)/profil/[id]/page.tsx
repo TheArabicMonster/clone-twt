@@ -16,6 +16,17 @@ export default async function Profil({params}: {params: {id: string}}) {
     const followingCount = await prisma.follow.count({
         where: { followerId: dataUser?.id },
     })
+    if(!session?.user || !dataUser){
+        return <div className="text-white">User not found</div>;
+    }
+    const isFollowing = await prisma.follow.findUnique({
+        where:{
+            followerId_followingId:{
+                followerId: session?.user?.id,
+                followingId: dataUser?.id
+            }
+        }
+    })
 
     return (
         <div className="flex flex-col bg-gray-900 w-full h-[calc(100vh-1rem)] rounded-lg p-4 mt-2 mb-2">
@@ -29,14 +40,18 @@ export default async function Profil({params}: {params: {id: string}}) {
                         </div>
                     </div>
                     <div className="w-1/2 flex items-center justify-center">
-                        <div className="flex flex-col items-center space-y-2">
+                        <div className="flex flex-col justify-start space-y-2">
                             <p className="text-white text-lg">{followersCount} abonnés</p>
                             <p className="text-white text-lg">{followingCount} abonnements</p>
-                            {isOwner ? null : <FollowButton />}
+                            {isOwner ? null : (
+                                dataUser?.id &&(
+                                    <FollowButton followingId={dataUser.id} isFollowing={!!isFollowing}/>
+                                )
+                            )}
                         </div>
                     </div>
                 </div> 
-               <div className="text-white text-md">{dataUser?.bio}</div> 
+               <div className="text-white text-md pb-2">{dataUser?.bio}</div> 
             </div>
             <div className="basis-2/3 flex flex-col items-center bg-gray-800 rounded-lg p-4 mt-4 w-full">
                 <ProfilTabs />
