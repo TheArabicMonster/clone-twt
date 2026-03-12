@@ -6,13 +6,18 @@ import Credentials from "next-auth/providers/credentials";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+    session: {
+        strategy: "jwt",
+        maxAge: 60 * 60 * 12, // validité du token -> 12h
+    },
     providers: [
     Credentials({
         name: "credentials",
-        credentials: {
+        credentials: { //champs requis pour la connexion
           email: { label: "Email", type: "email" },
           password: { label: "Password", type: "password" },
         },
+        //Vérifie que les creds soient valides et retourne les infos du user
         async authorize(credentials) {
           if (!credentials?.email || !credentials?.password) {
             throw new Error("Email et mot de passe requis");

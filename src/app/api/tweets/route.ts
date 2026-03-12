@@ -14,6 +14,9 @@ export async function GET() {
                 user: true,
                 _count: {
                     select: { likes: true, comments: true }
+                },
+                likes: {
+                where: { userId: session.user.id }
                 }
             }
         })
@@ -22,8 +25,6 @@ export async function GET() {
         return NextResponse.json({ error: "Failed to fetch tweets" }, { status: 500 });
     }
 }
-
-
 export async function POST(request: Request) {
     const session = await auth();
     if(!session?.user){

@@ -1,9 +1,11 @@
 import { Prisma } from "@prisma/client";
-import { Card, CardBody, Avatar, Button } from "@heroui/react";
-import { Heart, MessageCircle } from "lucide-react";
-type TweetWithUser = Prisma.TweetGetPayload<{  //Type custom pour inclure les données relatif au tweet pas contenu directement dans la table tweet
-            include: { user: true, _count: { select: { likes: true, comments: true } } } 
-        }>;
+import { Card, CardBody, Avatar } from "@heroui/react";
+import ButtonLike from "@/components/ButtonLike";
+import ButtonComment from "@/components/ButtonComment";
+type TweetWithUser = Prisma.TweetGetPayload<{
+  //Type custom pour inclure les données relatif au tweet pas contenu directement dans la table tweet
+  include: { user: true; likes: true; _count: { select: { likes: true; comments: true } } };
+}>;
 export default function TweetCard({tweet}: {tweet: TweetWithUser}) {
     
 return (
@@ -24,12 +26,8 @@ return (
                 </div>
                 <p className="text-white mt-1 break-words">{tweet.content}</p>
                 <div className="flex gap-2 mt-2">
-                    <Button variant="light" size="sm" startContent={<Heart size={16} />}>
-                        {tweet._count.likes}
-                    </Button>
-                    <Button variant="light" size="sm" startContent={<MessageCircle size={16} />}>
-                        {tweet._count.comments}
-                    </Button>
+                    <ButtonLike tweetId={tweet.id} initialLikes={tweet._count.likes} initialIsLiked={tweet.likes.length > 0} />
+                    <ButtonComment tweetId={tweet.id} initialComments={tweet._count.comments} />
                 </div>
             </div>
         </CardBody>

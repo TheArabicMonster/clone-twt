@@ -7,11 +7,12 @@ import { useDisclosure } from "@heroui/react";
 import { Prisma } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 export default function Timeline() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const router = useRouter();
     type TweetWithUser = Prisma.TweetGetPayload<{ 
-        include: { user: true, _count: { select: { likes: true, comments: true } } } 
+        include: { user: true, likes: true, _count: { select: { likes: true, comments: true } } } 
     }>;
 
     const [tweets, setTweets] = useState<TweetWithUser[]>([]);

@@ -17,7 +17,7 @@ export default async function Profil({params}: {params: {id: string}}) {
         where: { followerId: dataUser?.id },
     })
     if(!session?.user || !dataUser){
-        return <div className="text-white">User not found</div>;
+        return <div>User not found</div>;
     }
     const isFollowing = await prisma.follow.findUnique({
         where:{
@@ -29,11 +29,11 @@ export default async function Profil({params}: {params: {id: string}}) {
     })
 
     return (
-        <div className="flex flex-col bg-gray-900 w-full h-[calc(100vh-1rem)] rounded-lg p-4 mt-2 mb-2">
+        <div className="flex flex-col bg-gray-900 w-full h-[calc(100vh-1rem)] rounded-lg p-4 mt-2 mb-2 overflow-hidden">
             <div className="basis-1/3 flex flex-col items-center bg-gray-800 rounded-lg p-4">
                 <div className="flex flex-row w-full h-full">
                     <div className="w-1/2 flex flex-row items-center">
-                        <img src={dataUser?.image ?? "/default-profile.png"} alt="Profile Picture" className="w-32 h-32 rounded-full mr-4 self-center" />
+                        <img src={dataUser?.image ?? "/default-profile.png"} className="w-32 h-32 rounded-full mr-4 self-center" />
                         <div className="self-center">
                             <h2 className="text-2xl font-bold text-white">{dataUser?.pseudo}</h2>
                             <p className="text-gray-400">@{dataUser?.username}</p>
@@ -53,9 +53,10 @@ export default async function Profil({params}: {params: {id: string}}) {
                 </div> 
                <div className="text-white text-md pb-2">{dataUser?.bio}</div> 
             </div>
-            <div className="basis-2/3 flex flex-col items-center bg-gray-800 rounded-lg p-4 mt-4 w-full">
-                <ProfilTabs />
+            <div className="basis-2/3 flex flex-col items-center bg-gray-800 rounded-lg p-4 mt-4 w-full overflow-y-auto min-h-0">
+                <ProfilTabs userId={dataUser.id} />
             </div>
+            
         </div>
     );
 }
