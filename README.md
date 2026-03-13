@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clone TWT - README Technique
 
-## Getting Started
+Application web full-stack de type micro-réseau social, construite avec Next.js côté interface et API, Prisma comme couche d'accès aux données MongoDB Atlas, Auth.js pour les sessions, Zod pour la validation stricte des entrées et Bcrypt pour la protection des mots de passe. L'application est pensée pour supporter des interactions en temps réel via Pusher et la gestion de médias utilisateurs via Cloudinary.
 
-First, run the development server:
+### Stack technique
+
+Le frontend repose sur Next.js (App Router), HeroUI pour les composants et TailwindCSS pour le styling. Le backend est porté par les routes API Next.js avec une logique REST, protégée par Auth.js (authentification/session) et validée avec Zod. La persistance se fait sur MongoDB Atlas à travers Prisma, qui fournit un mapping typé TypeScript vers le modèle NoSQL.
+
+### Architecture et flux de données
+
+Le flux nominal d'une requête est le suivant: l'utilisateur agit depuis l'interface, le client appelle une route API, la route vérifie la session, valide les données reçues, exécute la mutation ou la lecture via Prisma, puis retourne une réponse JSON consommée par le frontend.
+
+```text
+Client (Next.js + HeroUI)
+	-> API Route (Auth.js + Zod)
+	-> Prisma Client
+	-> MongoDB Atlas
+	-> Réponse JSON
+```
+
+Pour les événements temps réel, le backend publie un événement après mutation valide, et les clients abonnés reçoivent la mise à jour par WebSocket.
+
+```text
+Mutation API réussie
+	-> Trigger Pusher (channel + event)
+	-> Broadcast WebSocket
+	-> Rafraîchissement ciblé de l'UI côté clients abonnés
+```
+
+Pour les médias, le backend envoie le fichier vers Cloudinary, récupère l'URL publique et persiste cette URL dans MongoDB via Prisma. La base conserve donc une référence d'asset, pas le fichier brut.
+
+```text
+Upload utilisateur
+	-> API Route
+	-> Cloudinary (stockage/CDN)
+	-> URL publique
+	-> Prisma update/create (User.image, User.coverImage, etc.)
+```
+
+### Sécurité et intégrité
+
+Auth.js isole les routes publiques des routes protégées et maintient une session serveur fiable. Les mots de passe ne sont jamais stockés en clair: Bcrypt calcule un hash avant écriture en base. Zod sert de pare-feu applicatif contre les entrées invalides et réduit les risques d'injections logiques en imposant un schéma strict sur chaque payload entrant (types, tailles, regex, contraintes inter-champs).
+
+Prisma renforce la cohérence en centralisant les contraintes métier au niveau du modèle (unicité d'email/username, unicité composite des follows/likes) et en empêchant une grande partie des erreurs de typage ou de mapping.
+
+### Mise en service (moins de 5 minutes)
+
+#### Prérequis
+
+- Node.js 20+
+- npm
+- Base MongoDB Atlas disponible
+
+#### 1) Cloner et installer
+
+```bash
+git clone <url-du-repo>
+cd clone-twt
+npm install
+```
+
+#### 2) Configurer l'environnement
+
+Créer un fichier `.env` à la racine en reprenant la base suivante.
+
+```env
+# App
+NEXTAUTH_URL=http://localhost:3000
+AUTH_SECRET=replace_with_a_long_random_secret
+
+# Database
+DATABASE_URL=mongodb+srv://<user>:<password>@<cluster>/<db>?retryWrites=true&w=majority
+
+# Pusher (temps réel)
+PUSHER_APP_ID=
+PUSHER_KEY=
+PUSHER_SECRET=
+NEXT_PUBLIC_PUSHER_KEY=
+NEXT_PUBLIC_PUSHER_CLUSTER=
+
+# Cloudinary (médias)
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_URL=
+```
+
+#### 3) Générer Prisma Client
+
+```bash
+npx prisma generate
+```
+
+#### 4) Lancer le projet
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Accès local: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Section .env.example (référence de configuration)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Le projet doit disposer d'une référence de variables pour éviter toute ambiguïté de setup. Le bloc ci-dessous peut être copié tel quel comme base de `.env.example`.
 
-## Learn More
+```env
+NEXTAUTH_URL=http://localhost:3000
+AUTH_SECRET=
+DATABASE_URL=
 
-To learn more about Next.js, take a look at the following resources:
+PUSHER_APP_ID=
+PUSHER_KEY=
+PUSHER_SECRET=
+NEXT_PUBLIC_PUSHER_KEY=
+NEXT_PUBLIC_PUSHER_CLUSTER=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_URL=
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Arborescence simplifiée
 
-## Deploy on Vercel
+```text
+.
+|- prisma/
+|  |- schema.prisma
+|- src/
+|  |- app/
+|  |  |- (protected)/
+|  |  |- api/
+|  |  |  |- auth/
+|  |  |  |- tweets/
+|  |  |- login/
+|  |  |- signup/
+|  |- components/
+|  |- lib/
+|  |  |- auth.ts
+|  |  |- prisma.ts
+|  |- types/
+|- middleware.ts
+|- package.json
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Pourquoi ces choix techniques
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Zod réduit le coût des erreurs en validant à la frontière de l'API avant l'accès aux données. Prisma apporte un contrat typé unique entre le code et la base MongoDB, ce qui fiabilise les requêtes et accélère l'évolution du modèle. Pusher évite le polling continu en diffusant les événements utiles uniquement quand ils existent. Cloudinary externalise le stockage média et la distribution CDN, ce qui réduit la charge backend et stabilise les performances de rendu d'images.
