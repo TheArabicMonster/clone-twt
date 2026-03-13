@@ -14,10 +14,12 @@ const signUpSchema = z
     email: z.string().email("Email invalide"),
     username: z
       .string()
-      .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
-      .max(20, "Maximum 20 caractères")
+      .min(1, "Le nom d'utilisateur doit contenir au moins 1 caractères")
+      .max(25, "Maximum 25 caractères")
       .regex(/^[a-zA-Z0-9_]+$/, "Lettres, chiffres et underscores uniquement"),
-    pseudo: z.string().min(1, "Le pseudo est requis"),
+    pseudo: z.string()
+      .min(1, "Le pseudo doit contenir au moins 1 caractères")
+      .max(25, "Le pseudo doit contenir au maximum 25 caractères"),
     password: z
       .string()
       .min(8, "Minimum 8 caractères")

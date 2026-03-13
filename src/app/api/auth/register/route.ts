@@ -8,13 +8,13 @@ const registerSchema = z.object({
   email: z.string().email("Email invalide"),
   username: z
     .string()
-    .min(3, "Le nom d'utilisateur doit contenir au moins 3 caractères")
-    .max(20, "Le nom d'utilisateur ne peut pas dépasser 20 caractères")
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Le nom d'utilisateur ne peut contenir que des lettres, chiffres et underscores",
-    ),
-  pseudo: z.string().min(1, "Le pseudo est requis"),
+    .min(1, "Le nom d'utilisateur doit contenir au moins 1 caractères")
+    .max(25, "Maximum 25 caractères")
+    .regex(/^[a-zA-Z0-9_]+$/, "Lettres, chiffres et underscores uniquement"),
+  pseudo: z
+    .string()
+    .min(1, "Le pseudo doit contenir au moins 1 caractères")
+    .max(25, "Le pseudo doit contenir au maximum 25 caractères"),
   password: z
     .string()
     .min(8, "Le mot de passe doit contenir au moins 8 caractères")
@@ -68,14 +68,9 @@ export async function POST(request: Request) {
       },
     });
 
-    // Retourner l'utilisateur (sans le mot de passe)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { hashedPassword: _, ...userWithoutPassword } = user;
-
     return NextResponse.json(
       {
         message: "Compte créé avec succès",
-        user: userWithoutPassword,
       },
       { status: 201 },
     );

@@ -17,7 +17,6 @@ model User {
   pseudo         String
   bio            String?   @default("cette personne n'a pas encore de bio")
   image          String?
-  coverImage     String?
   hashedPassword String?
   emailVerified  DateTime?
   createdAt      DateTime  @default(now())
@@ -37,7 +36,6 @@ model User {
 model Tweet {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   content   String
-  image     String?
   userId    String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
