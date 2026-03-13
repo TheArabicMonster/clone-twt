@@ -1,9 +1,9 @@
 "use client";
-import { User, House, Mail } from "lucide-react";
+import { User, House, Mail, LogOut } from "lucide-react";
 import { Button } from "@heroui/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export default function SideBar() {
     const pathname = usePathname();
@@ -27,7 +27,17 @@ export default function SideBar() {
                     <Mail className="text-white w-auto h-auto" size={40} strokeWidth={1.4} />
                 </Button>
             </div>
-            <div className="flex-1" />
+            <div className="flex-1 flex items-end justify-center">
+                <Button
+                    isIconOnly
+                    variant="light"
+                    onPress={() => signOut({ callbackUrl: "/login" })}
+                    className="transition-all duration-300 rounded-md bg-transparent hover:bg-danger/20"
+                    aria-label="Se déconnecter"
+                >
+                    <LogOut className="text-danger w-auto h-auto" size={32} strokeWidth={1.8} />
+                </Button>
+            </div>
         </div>
     )
 }
