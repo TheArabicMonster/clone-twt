@@ -48,6 +48,25 @@ DATABASE_URL=mongodb+srv://<user>:<password>@<cluster>/<db>?retryWrites=true&w=m
 
 ```
 
+#### 2.1) Créer une base MongoDB Atlas et récupérer l'URL
+
+1. Créer un compte sur MongoDB Atlas puis créer un projet.
+2. Créer un cluster (option gratuite M0 suffit pour le développement).
+3. Aller dans Database Access et créer un utilisateur base de données (username/password).
+4. Aller dans Network Access et autoriser ton IP actuelle (ou `0.0.0.0/0` en dev uniquement).
+5. Dans le cluster, cliquer sur Connect puis Drivers.
+6. Copier la connection string fournie par Atlas.
+7. Remplacer `<password>` par le mot de passe de l'utilisateur DB.
+8. Remplacer `<db>` par le nom de ta base (exemple: `clone_twt`).
+9. Coller la valeur finale dans `DATABASE_URL` de ton `.env`.
+
+Exemple final:
+
+```env
+DATABASE_URL=mongodb+srv://myUser:myStrongPassword@cluster0.xxxxx.mongodb.net/clone_twt?retryWrites=true&w=majority&appName=Cluster0
+```
+
+
 #### 3) Générer Prisma Client
 
 ```bash
