@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import ProfilTabs from "../_components/ProfilTabs";
 import FollowButton from "../_components/FollowButton";
+import MessageButton from "../_components/MessageButton";
 import { prisma } from "@/lib/prisma";
 
 export default async function Profil({params}: {params: {id: string}}) {
@@ -45,7 +46,10 @@ export default async function Profil({params}: {params: {id: string}}) {
                             <p className="text-white text-lg">{followingCount} abonnements</p>
                             {isOwner ? null : (
                                 dataUser?.id &&(
-                                    <FollowButton followingId={dataUser.id} isFollowing={!!isFollowing}/>
+                                    <>
+                                        <FollowButton followingId={dataUser.id} isFollowing={!!isFollowing}/>
+                                        <MessageButton userId={dataUser.id} />
+                                    </>
                                 )
                             )}
                         </div>
