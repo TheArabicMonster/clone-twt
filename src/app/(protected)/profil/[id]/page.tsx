@@ -2,15 +2,16 @@ import { auth } from "@/lib/auth";
 import ProfilTabs from "../_components/ProfilTabs";
 import FollowButton from "../_components/FollowButton";
 import MessageButton from "../_components/MessageButton";
+import EditProfileButton from "../_components/EditProfileButton";
 import { prisma } from "@/lib/prisma";
 
-export default async function Profil({params}: {params: {id: string}}) {
+export default async function Profil({params}: {params: Promise<{id: string}>}) {
     const session = await auth();
     const {id} = await params;
-    const isOwner=session?.user.username === id;
     const dataUser = await prisma.user.findUnique({
         where: { username: id }
     })
+    const isOwner = !!session?.user && !!dataUser && session.user.id === dataUser.id;
     const followersCount = await prisma.follow.count({
         where: { followingId: dataUser?.id },
     });
@@ -52,6 +53,13 @@ export default async function Profil({params}: {params: {id: string}}) {
                                     </>
                                 )
                             )}
+                            {isOwner ? (
+                                <EditProfileButton
+                                    pseudo={dataUser.pseudo}
+                                    bio={dataUser.bio}
+                                    image={dataUser.image}
+                                />
+                            ) : null}
                         </div>
                     </div>
                 </div> 
