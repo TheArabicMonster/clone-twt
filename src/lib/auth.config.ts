@@ -49,14 +49,14 @@ export const authConfig: NextAuthConfig = {
         }
         const baseUrl = `${nextUrl.protocol}//${nextUrl.host}`;
         if(isOnLandingPage&&isLoggedIn) {
-          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
+          return Response.redirect(new URL(`/profil/${auth?.user?.username}`, baseUrl));
         }
         if (isOnAuth) {
-          if (isLoggedIn) return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
+          if (isLoggedIn) return Response.redirect(new URL(`/profil/${auth?.user?.username}`, baseUrl));
           return true;
         }
         if(isOnNormalProfil&&isLoggedIn) {
-          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
+          return Response.redirect(new URL(`/profil/${auth?.user?.username}`, baseUrl));
         }
 
         return true; // Permet l'accès à toutes les autres routes
