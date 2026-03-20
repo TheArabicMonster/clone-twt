@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-export async function POST(_request: Request, {params}: {params:{tweetId: string}}){
+export async function POST(_request: Request, {params}: {params: Promise<{tweetId: string}>}){
     const session = await auth();
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -13,7 +13,7 @@ export async function POST(_request: Request, {params}: {params:{tweetId: string
         return NextResponse.json({ error: "Invalid content" }, { status: 400 });
     }
     try{
-        const comment = await prisma.comment.create({
+        await prisma.comment.create({
             data:{
                 content: content,
                 userId: session.user.id,
