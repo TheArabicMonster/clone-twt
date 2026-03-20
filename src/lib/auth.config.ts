@@ -47,15 +47,16 @@ export const authConfig: NextAuthConfig = {
         if(isOnProcectedRoute&&!isLoggedIn) {
           return Response.redirect(new URL("/login", nextUrl));
         }
+        const baseUrl = `${nextUrl.protocol}//${nextUrl.host}`;
         if(isOnLandingPage&&isLoggedIn) {
-          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
+          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
         }
         if (isOnAuth) {
-          if (isLoggedIn) return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
-          return true; 
+          if (isLoggedIn) return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
+          return true;
         }
         if(isOnNormalProfil&&isLoggedIn) {
-          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, nextUrl));
+          return Response.redirect(new URL(`/profil/${auth?.user?.id}`, baseUrl));
         }
 
         return true; // Permet l'accès à toutes les autres routes
