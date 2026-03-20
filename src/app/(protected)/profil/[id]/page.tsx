@@ -1,6 +1,8 @@
 import { auth } from "@/lib/auth";
 import ProfilTabs from "../_components/ProfilTabs";
 import FollowButton from "../_components/FollowButton";
+import EditProfileButton from "../_components/EditProfilButton";
+import ProfileAvatar from "../_components/ProfileAvatar";
 import { prisma } from "@/lib/prisma";
 
 export default async function Profil({params}: {params: {id: string}}) {
@@ -33,13 +35,16 @@ export default async function Profil({params}: {params: {id: string}}) {
             <div className="basis-1/3 flex flex-col items-center bg-gray-800 rounded-lg p-4">
                 <div className="flex flex-row w-full h-full">
                     <div className="w-1/2 flex flex-row items-center">
-                        <img src={dataUser?.image ?? "/default-profile.png"} className="w-32 h-32 rounded-full mr-4 self-center" />
+                        <ProfileAvatar src={dataUser?.image} className="w-32 h-32 mr-4 self-center" />
                         <div className="self-center">
                             <h2 className="text-2xl font-bold text-white">{dataUser?.pseudo}</h2>
                             <p className="text-gray-400">@{dataUser?.username}</p>
                         </div>
                     </div>
                     <div className="w-1/2 flex items-center justify-center">
+                        <div className="absolute top-12 right-12">
+                            {isOwner && <EditProfileButton bio={dataUser?.bio} image={dataUser?.image} pseudo={dataUser?.pseudo}/>}
+                        </div>
                         <div className="flex flex-col justify-start space-y-2">
                             <p className="text-white text-lg">{followersCount} abonnés</p>
                             <p className="text-white text-lg">{followingCount} abonnements</p>

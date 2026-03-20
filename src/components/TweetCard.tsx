@@ -12,7 +12,7 @@ return (
     <Card className="w-full rounded-none border-b border-gray-700 bg-transparent shadow-none">
         <CardBody className="flex flex-row gap-3 p-4">
             <Avatar
-                src={tweet.user.image ?? undefined}
+                src={tweet.user.image || undefined}
                 size="md"
             />
 
