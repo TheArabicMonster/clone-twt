@@ -126,7 +126,40 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // For all other routes, delegate to NextAuth session validation.
+  // --- Rate limiting for API routes (non-auth) ---
+  // Applied at the edge BEFORE the route handler runs, regardless of auth
+  // state. This ensures unauthenticated requests are also rate-limited,
+  // preventing enumeration and DoS even when the handler returns 401.
+  if (pathname.startsWith("/api/")) {
+    const ip = getClientIP(request);
+    const key = `api:${ip}`;
+
+    // Allow at most 60 requests per minute per IP on general API routes.
+    const limited = isRateLimited(key, 60, 60);
+
+    if (limited) {
+      return new NextResponse(
+        JSON.stringify({ error: "Too many requests, please slow down." }),
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": "60",
+            "X-RateLimit-Limit": "60",
+            "X-RateLimit-Remaining": "0",
+          },
+        }
+      );
+    }
+
+    // API routes handle their own authentication (returning 401 when needed).
+    // Do NOT delegate to NextAuth's authMiddleware for API routes — it can
+    // interfere and return 403 instead of letting the route handler produce
+    // the correct 401 Unauthorized response.
+    return NextResponse.next();
+  }
+
+  // For page routes, delegate to NextAuth session validation.
   return (authMiddleware as unknown as (req: NextRequest) => Promise<NextResponse>)(request);
 }
 
