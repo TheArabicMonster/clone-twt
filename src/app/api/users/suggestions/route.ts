@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 // GET /api/users/suggestions
 // Retourne jusqu'à 10 utilisateurs que l'utilisateur connecté pourrait vouloir
@@ -14,6 +15,8 @@ export async function GET() {
     }
 
     const currentUserId = session.user.id;
+    const limited = rateLimits.read(currentUserId, "users:suggestions");
+    if (limited) return limited;
 
     // Étape 1 : IDs des utilisateurs que currentUser suit
     const following = await prisma.follow.findMany({

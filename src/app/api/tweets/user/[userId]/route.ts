@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 export async function GET(_request: Request, { params }: { params: Promise<{ userId: string }> }) {
     const session = await auth();
     if (!session?.user) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.read(session.user.id, "tweets:user");
+    if (limited) return limited;
     const { userId } = await params;
     try {
         const tweets = await prisma.tweet.findMany({

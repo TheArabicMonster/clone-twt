@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 export async function GET() {
     const session = await auth();
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.read(session.user.id, "tweets:GET");
+    if (limited) return limited;
     try{
         const tweets = await prisma.tweet.findMany({
             orderBy: { createdAt: "desc" },
@@ -30,6 +33,8 @@ export async function POST(request: Request) {
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.write(session.user.id, "tweets:POST");
+    if (limited) return limited;
     const { content } = await request.json();
     //Validation
     if(typeof content !== "string" || content.length === 0 || content.length > 350){

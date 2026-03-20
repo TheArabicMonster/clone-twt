@@ -2,6 +2,16 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { pusherServer } from "@/lib/pusher";
+import { z } from "zod";
+import { rateLimits } from "@/lib/rate-limit";
+
+interface MessageBody {
+  content: string;
+}
+
+const messageBodySchema = z.object({
+  content: z.string().trim().min(1).max(350),
+});
 
 interface RouteParams {
   params: Promise<{ conversationId: string }>;
@@ -19,6 +29,9 @@ export async function GET(_request: Request, { params }: RouteParams) {
 
     const { conversationId } = await params;
     const currentUserId = session.user.id;
+
+    const limited = rateLimits.read(currentUserId, "messages:GET");
+    if (limited) return limited;
 
     // Vérifie que la conversation existe et que l'utilisateur est participant
     const conversation = await prisma.conversation.findUnique({
@@ -77,16 +90,17 @@ export async function POST(request: Request, { params }: RouteParams) {
 
     const { conversationId } = await params;
     const currentUserId = session.user.id;
+
+    const limited = rateLimits.write(currentUserId, "messages:POST");
+    if (limited) return limited;
+
     const body = await request.json();
-    const { content } = body as { content: string };
-
-    if (!content || content.trim().length === 0) {
-      return NextResponse.json(
-        { error: "Le contenu du message est requis" },
-        { status: 400 }
-      );
+    let content: string;
+    try {
+      ({ content } = messageBodySchema.parse(body));
+    } catch (validationError) {
+      return NextResponse.json({ error: "Données invalides" }, { status: 400 });
     }
-
     // Vérifie que la conversation existe et que l'utilisateur est participant
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },

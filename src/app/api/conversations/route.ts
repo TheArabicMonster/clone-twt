@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 // GET /api/conversations
 // Retourne toutes les conversations de l'utilisateur connecté,
@@ -11,6 +12,8 @@ export async function GET() {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
+    const limited = rateLimits.read(session.user.id, "conversations:GET");
+    if (limited) return limited;
 
     const currentUserId = session.user.id;
 
@@ -76,6 +79,8 @@ export async function POST(request: Request) {
     }
 
     const currentUserId = session.user.id;
+    const limited2 = rateLimits.write(currentUserId, "conversations:POST");
+    if (limited2) return limited2;
     const body = await request.json();
     const { participantId } = body as { participantId: string };
 

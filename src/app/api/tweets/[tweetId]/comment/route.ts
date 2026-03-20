@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 export async function POST(_request: Request, {params}: {params: Promise<{tweetId: string}>}){
     const session = await auth();
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.write(session.user.id, "comment:POST");
+    if (limited) return limited;
     const { tweetId } = await params;
     const { content } = await _request.json();
     //validation du commentarie
@@ -30,6 +33,8 @@ export async function GET(_request: Request, { params }: { params: Promise<{ twe
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.read(session.user.id, "comment:GET");
+    if (limited) return limited;
     const { tweetId } = await params;
     try{
         const comments = await prisma.comment.findMany({

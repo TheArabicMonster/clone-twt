@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 const updateProfileSchema = z.object({
   pseudo: z
@@ -74,6 +75,8 @@ export async function PATCH(request: NextRequest) {
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+  const limited = rateLimits.profile(session.user.id);
+  if (limited) return limited;
 
   try {
     const body = await request.json();

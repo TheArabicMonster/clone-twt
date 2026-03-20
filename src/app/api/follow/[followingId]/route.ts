@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { rateLimits } from '@/lib/rate-limit';
 export async function POST(
     _request: Request,//'_' pour dire qu'il est intentionnellement pas utilisé (ㆆ _ ㆆ)
     { params }: { params: Promise<{followingId: string}> } //Promise pour récupérer l'id du profil à suivre depuis l'URL
@@ -10,6 +11,8 @@ export async function POST(
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.social(session.user.id, "follow:POST");
+    if (limited) return limited;
     const { followingId } = await params;
 
     if(followingId === session.user.id){
@@ -39,6 +42,8 @@ export async function DELETE(
     if(!session?.user){
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    const limited = rateLimits.social(session.user.id, "follow:DELETE");
+    if (limited) return limited;
     const { followingId } = await params; 
     //Si user tente de s'unffolow lui même -> 400
     if(followingId === session.user.id){

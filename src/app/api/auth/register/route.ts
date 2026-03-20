@@ -1,7 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 // Schéma de validation avec Zod
 const registerSchema = z.object({
@@ -24,7 +25,11 @@ const registerSchema = z.object({
     ),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const ip = request.headers.get("x-forwarded-for") ?? request.headers.get("x-real-ip") ?? "unknown";
+  const limited = rateLimits.auth(ip);
+  if (limited) return limited;
+
   try {
     const body = await request.json();
 

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 // GET /api/users/search?q=...
 // Recherche des utilisateurs par username ou pseudo (insensible à la casse).
@@ -13,6 +14,8 @@ export async function GET(request: Request) {
     }
 
     const currentUserId = session.user.id;
+    const limited = rateLimits.read(currentUserId, "users:search");
+    if (limited) return limited;
     const { searchParams } = new URL(request.url);
     const query = searchParams.get("q")?.trim();
 

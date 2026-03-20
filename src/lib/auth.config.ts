@@ -32,7 +32,6 @@ export const authConfig: NextAuthConfig = {
       return session;
     },
     authorized({ auth, request: { nextUrl } }) {
-      console.log(auth?.user);
         const isLoggedIn = !!auth?.user;
         const isOnAuth =
           nextUrl.pathname.startsWith("/login") ||
@@ -44,10 +43,10 @@ export const authConfig: NextAuthConfig = {
         const isOnProcectedRoute = protectedRoutes.some((route) =>
           nextUrl.pathname.startsWith(route)
         ); 
-        if(isOnProcectedRoute&&!isLoggedIn) {
-          return Response.redirect(new URL("/login", nextUrl));
-        }
         const baseUrl = `${nextUrl.protocol}//${nextUrl.host}`;
+        if(isOnProcectedRoute&&!isLoggedIn) {
+          return Response.redirect(new URL('/login', baseUrl));
+        }
         if(isOnLandingPage&&isLoggedIn) {
           return Response.redirect(new URL(`/profil/${auth?.user?.username}`, baseUrl));
         }

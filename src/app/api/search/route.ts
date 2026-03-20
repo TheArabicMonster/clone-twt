@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { rateLimits } from "@/lib/rate-limit";
 
 // GET /api/search?q=...
 // Recherche unifiée : retourne des tweets et des utilisateurs correspondant à la requête.
@@ -12,6 +13,8 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
     }
 
+    const limited = rateLimits.read(session.user.id, "search:GET");
+    if (limited) return limited;
     const { searchParams } = new URL(request.url);
     const q = searchParams.get("q")?.trim();
 
